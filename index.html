@@ -175,11 +175,11 @@
         <div class="input-row">
             <div class="input-group">
                 <label for="prevMonthName">Previous Month Name</label>
-                <input type="text" id="prevMonthName" placeholder="e.g. October" value="October">
+                <input type="text" id="prevMonthName" placeholder="e.g. Oct 2026">
             </div>
             <div class="input-group">
                 <label for="currMonthName">Current Month Name</label>
-                <input type="text" id="currMonthName" placeholder="e.g. November" value="November">
+                <input type="text" id="currMonthName" placeholder="e.g. Nov 2026">
             </div>
         </div>
 
@@ -227,8 +227,22 @@
     </div>
 
     <script>
-        const prevMonthInput = document.getElementById('prevMonthName');
-        const currMonthInput = document.getElementById('currMonthName');
+        // Automatically populate month and year on load
+        function setInitialMonths() {
+            const now = new Date();
+            
+            // Current Month & Year
+            const currOptions = { month: 'short', year: 'numeric' };
+            document.getElementById('currMonthName').value = now.toLocaleDateString('en-US', currOptions);
+
+            // Previous Month & Year
+            now.setMonth(now.getMonth() - 1);
+            const prevOptions = { month: 'short', year: 'numeric' };
+            document.getElementById('prevMonthName').value = now.toLocaleDateString('en-US', prevOptions);
+        }
+
+        window.addEventListener('DOMContentLoaded', setInitialMonths);
+
         const prevReadingInput = document.getElementById('prevReading');
         const currReadingInput = document.getElementById('currReading');
         const ratePerKwhInput = document.getElementById('ratePerKwh');
@@ -252,13 +266,11 @@
             const curr = parseFloat(currReadingInput.value) || 0;
             const rate = parseFloat(ratePerKwhInput.value) || 0;
 
-            // Formulas (using Math.abs to keep positive values and strip minus signs)
             const consumption = Math.abs(curr - prev);
             const totalCost = consumption * rate;
             const fortyPercent = totalCost * 0.4;
             const finalOutput = Math.abs(fortyPercent - totalCost);
 
-            // Update UI elements
             resConsumption.innerText = `${formatNumber(consumption)} kWh`;
             resTotalCost.innerText = formatCurrency(totalCost);
             resFortyPercent.innerText = formatCurrency(fortyPercent);
@@ -267,7 +279,6 @@
 
         calculateBtn.addEventListener('click', calculate);
 
-        // Trigger calculation on Enter key inside inputs
         document.querySelectorAll('input').forEach(input => {
             input.addEventListener('keydown', e => {
                 if (e.key === 'Enter') {
