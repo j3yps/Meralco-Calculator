@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MERALCO CALCULATOR</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --calc-bg: #1e293b;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --accent-color: #38bdf8;
+            --accent-hover: #0ea5e9;
+            --btn-bg: #334155;
+            --btn-hover: #475569;
+            --btn-eq: #10b981;
+            --btn-eq-hover: #059669;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .calculator-container {
+            display: flex;
+            gap: 20px;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        @media (max-width: 768px) {
+            .calculator-container {
+                flex-direction: column;
+            }
+        }
+
+        .calculator {
+            background-color: var(--calc-bg);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            width: 100%;
+            max-width: 440px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .calculator h1 {
+            font-size: 1.25rem;
+            text-align: center;
+            color: var(--accent-color);
+            letter-spacing: 0.05em;
+            margin-bottom: 4px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .input-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px 12px;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.15s ease;
+        }
+
+        input:focus {
+            border-color: var(--accent-color);
+        }
+
+        .calc-btn {
+            background-color: var(--btn-eq);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.15s ease;
+            margin-top: 4px;
+        }
+
+        .calc-btn:hover {
+            background-color: var(--btn-eq-hover);
+        }
+
+        /* Results & D Styling */
+        .result-box {
+            background: rgba(15, 23, 42, 0.8);
+            border-radius: 10px;
+            padding: 14px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .step-result {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .step-result span:last-child {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .divider {
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+            margin: 4px 0;
+        }
+
+        .final-d-container {
+            margin-top: 10px;
+            padding-top: 10px;
+            text-align: center;
+        }
+
+        .final-d-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 4px;
+        }
+
+        .final-d-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #f43f5e; /* Vibrant contrasting color for D */
+            background: rgba(244, 63, 94, 0.1);
+            padding: 8px;
+            border-radius: 8px;
+            border: 1px dashed rgba(244, 63, 94, 0.3);
+        }
+
+        /* History Sidebar */
+        .history-panel {
+            background-color: var(--calc-bg);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            width: 100%;
+            max-width: 340px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            max-height: 520px;
+        }
+
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 8px;
+        }
+
+        .clear-history {
+            background: none;
+            border: none;
+            color: #ef4444;
+            cursor: pointer;
+            font-size: 0.8rem;
+            padding: 0;
+        }
+
+        .clear-history:hover {
+            text-decoration: underline;
+        }
+
+        .history-list {
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            flex-grow: 1;
+        }
+
+        .history-item {
+            font-size: 0.85rem;
+            padding: 10px;
+            border-radius: 8px;
+            background: rgba(15, 23, 42, 0.4);
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .history-title {
+            color: var(--accent-color);
+            font-weight: 600;
+        }
+
+        .history-d {
+            color: #f43f5e;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="calculator-container">
+        <div class="calculator">
+            <h1>MERALCO CALCULATOR</h1>
+            
+            <div class="input-row">
+                <div class="input-group">
+                    <label for="prevMonthName">Previous Month Name</label>
+                    <input type="text" id="prevMonthName" placeholder="e.g. October" value="October">
+                </div>
+                <div class="input-group">
+                    <label for="currMonthName">Current Month Name</label>
+                    <input type="text" id="currMonthName" placeholder="e.g. November" value="November">
+                </div>
+            </div>
+
+            <div class="input-row">
+                <div class="input-group">
+                    <label for="prevReading">Prev Meter Reading (kWh)</label>
+                    <input type="number" id="prevReading" placeholder="0.00" step="any">
+                </div>
+                <div class="input-group">
+                    <label for="currReading">Curr Meter Reading (kWh)</label>
+                    <input type="number" id="currReading" placeholder="0.00" step="any">
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label for="ratePerKwh">Current Rate per kWh (₱)</label>
+                <input type="number" id="ratePerKwh" placeholder="0.00" step="any">
+            </div>
+
+            <button class="calc-btn" id="calculateBtn">Calculate</button>
+
+            <div class="result-box">
+                <div class="step-result">
+                    <span>Consumption (A):</span>
+                    <span id="resA">0.00 kWh</span>
+                </div>
+                <div class="step-result">
+                    <span>Total Cost (B):</span>
+                    <span id="resB">₱0.00</span>
+                </div>
+                <div class="step-result">
+                    <span>Adjusted Factor (C):</span>
+                    <span id="resC">₱0.00</span>
+                </div>
+                
+                <div class="divider"></div>
+
+                <div class="final-d-container">
+                    <div class="final-d-label">Final Output (D)</div>
+                    <div class="final-d-value" id="resD">₱0.00</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="history-panel">
+            <div class="history-header">
+                <span>Calculation History</span>
+                <button class="clear-history" id="clearHistory">Clear</button>
+            </div>
+            <div class="history-list" id="historyList">
+                <div style="color: var(--text-secondary); font-size: 0.85rem; text-align: center; margin-top: 20px;">No calculations yet</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const prevMonthInput = document.getElementById('prevMonthName');
+        const currMonthInput = document.getElementById('currMonthName');
+        const prevReadingInput = document.getElementById('prevReading');
+        const currReadingInput = document.getElementById('currReading');
+        const ratePerKwhInput = document.getElementById('ratePerKwh');
+        const calculateBtn = document.getElementById('calculateBtn');
+
+        const resA = document.getElementById('resA');
+        const resB = document.getElementById('resB');
+        const resC = document.getElementById('resC');
+        const resD = document.getElementById('resD');
+        const historyList = document.getElementById('historyList');
+        const clearHistoryBtn = document.getElementById('clearHistory');
+
+        let history = [];
+
+        function formatCurrency(amount) {
+            return '₱' + Number(amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        function formatNumber(num) {
+            return Number(num).toLocaleString('en-US', { maximumFractionDigits: 2 });
+        }
+
+        function calculate() {
+            const prevName = prevMonthInput.value || 'Previous Month';
+            const currName = currMonthInput.value || 'Current Month';
+            const prev = parseFloat(prevReadingInput.value) || 0;
+            const curr = parseFloat(currReadingInput.value) || 0;
+            const rate = parseFloat(ratePerKwhInput.value) || 0;
+
+            // Formula:
+            // Current Month minus Previous Month = A
+            const A = curr - prev;
+            
+            // A multiplied by current rate per KwH = B
+            const B = A * rate;
+            
+            // B multiplied by .4 = C
+            const C = B * 0.4;
+            
+            // C minus B = D
+            const D = C - B;
+
+            // Update UI elements
+            resA.innerText = `${formatNumber(A)} kWh`;
+            resB.innerText = formatCurrency(B);
+            resC.innerText = formatCurrency(C);
+            resD.innerText = formatCurrency(D);
+
+            // Add to history
+            const historyItem = {
+                title: `${prevName} to ${currName}`,
+                A: `${formatNumber(A)} kWh`,
+                B: formatCurrency(B),
+                C: formatCurrency(C),
+                D: formatCurrency(D)
+            };
+
+            history.unshift(historyItem);
+            if (history.length > 15) history.pop();
+            renderHistory();
+        }
+
+        function renderHistory() {
+            if (history.length === 0) {
+                historyList.innerHTML = `<div style="color: var(--text-secondary); font-size: 0.85rem; text-align: center; margin-top: 20px;">No calculations yet</div>`;
+                return;
+            }
+            historyList.innerHTML = history.map(item => `
+                <div class="history-item">
+                    <div class="history-title">${item.title}</div>
+                    <div>A: ${item.A} | B: ${item.B}</div>
+                    <div>C: ${item.C}</div>
+                    <div class="history-d">D: ${item.D}</div>
+                </div>
+            `).join('');
+        }
+
+        calculateBtn.addEventListener('click', calculate);
+
+        clearHistoryBtn.addEventListener('click', () => {
+            history = [];
+            renderHistory();
+        });
+
+        // Trigger calculation on Enter key inside inputs
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('keydown', e => {
+                if (e.key === 'Enter') {
+                    calculate();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
