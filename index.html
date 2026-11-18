@@ -12,8 +12,6 @@
             --text-secondary: #94a3b8;
             --accent-color: #38bdf8;
             --accent-hover: #0ea5e9;
-            --btn-bg: #334155;
-            --btn-hover: #475569;
             --btn-eq: #10b981;
             --btn-eq-hover: #059669;
             --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
@@ -34,19 +32,6 @@
             justify-content: center;
             align-items: center;
             padding: 20px;
-        }
-
-        .calculator-container {
-            display: flex;
-            gap: 20px;
-            max-width: 800px;
-            width: 100%;
-        }
-
-        @media (max-width: 768px) {
-            .calculator-container {
-                flex-direction: column;
-            }
         }
 
         .calculator {
@@ -120,14 +105,14 @@
             background-color: var(--btn-eq-hover);
         }
 
-        /* Results & D Styling */
+        /* Results Styling */
         .result-box {
             background: rgba(15, 23, 42, 0.8);
             border-radius: 10px;
-            padding: 14px 16px;
+            padding: 16px;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 12px;
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
@@ -140,172 +125,104 @@
 
         .step-result span:last-child {
             color: var(--text-primary);
-            font-weight: 500;
+            font-weight: 600;
         }
 
         .divider {
             height: 1px;
             background: rgba(255, 255, 255, 0.1);
-            margin: 4px 0;
+            margin: 2px 0;
         }
 
-        .final-d-container {
-            margin-top: 10px;
-            padding-top: 10px;
+        .total-row {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--accent-color);
+        }
+
+        /* Final Output Separate Section */
+        .final-section {
+            background: rgba(244, 63, 94, 0.08);
+            border: 1px dashed rgba(244, 63, 94, 0.3);
+            border-radius: 10px;
+            padding: 14px 16px;
             text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-top: 4px;
         }
 
-        .final-d-label {
+        .final-label {
             font-size: 0.85rem;
             color: var(--text-secondary);
             text-transform: uppercase;
             letter-spacing: 0.05em;
-            margin-bottom: 4px;
         }
 
-        .final-d-value {
+        .final-value {
             font-size: 2rem;
             font-weight: 700;
-            color: #f43f5e; /* Vibrant contrasting color for D */
-            background: rgba(244, 63, 94, 0.1);
-            padding: 8px;
-            border-radius: 8px;
-            border: 1px dashed rgba(244, 63, 94, 0.3);
-        }
-
-        /* History Sidebar */
-        .history-panel {
-            background-color: var(--calc-bg);
-            border-radius: 16px;
-            box-shadow: var(--shadow);
-            width: 100%;
-            max-width: 340px;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            max-height: 520px;
-        }
-
-        .history-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: var(--text-secondary);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            padding-bottom: 8px;
-        }
-
-        .clear-history {
-            background: none;
-            border: none;
-            color: #ef4444;
-            cursor: pointer;
-            font-size: 0.8rem;
-            padding: 0;
-        }
-
-        .clear-history:hover {
-            text-decoration: underline;
-        }
-
-        .history-list {
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            flex-grow: 1;
-        }
-
-        .history-item {
-            font-size: 0.85rem;
-            padding: 10px;
-            border-radius: 8px;
-            background: rgba(15, 23, 42, 0.4);
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .history-title {
-            color: var(--accent-color);
-            font-weight: 600;
-        }
-
-        .history-d {
             color: #f43f5e;
-            font-weight: 700;
         }
     </style>
 </head>
 <body>
 
-    <div class="calculator-container">
-        <div class="calculator">
-            <h1>MERALCO CALCULATOR</h1>
-            
-            <div class="input-row">
-                <div class="input-group">
-                    <label for="prevMonthName">Previous Month Name</label>
-                    <input type="text" id="prevMonthName" placeholder="e.g. October" value="October">
-                </div>
-                <div class="input-group">
-                    <label for="currMonthName">Current Month Name</label>
-                    <input type="text" id="currMonthName" placeholder="e.g. November" value="November">
-                </div>
-            </div>
-
-            <div class="input-row">
-                <div class="input-group">
-                    <label for="prevReading">Prev Meter Reading (kWh)</label>
-                    <input type="number" id="prevReading" placeholder="0.00" step="any">
-                </div>
-                <div class="input-group">
-                    <label for="currReading">Curr Meter Reading (kWh)</label>
-                    <input type="number" id="currReading" placeholder="0.00" step="any">
-                </div>
-            </div>
-
+    <div class="calculator">
+        <h1>MERALCO CALCULATOR</h1>
+        
+        <div class="input-row">
             <div class="input-group">
-                <label for="ratePerKwh">Current Rate per kWh (₱)</label>
-                <input type="number" id="ratePerKwh" placeholder="0.00" step="any">
+                <label for="prevMonthName">Previous Month Name</label>
+                <input type="text" id="prevMonthName" placeholder="e.g. October" value="October">
             </div>
-
-            <button class="calc-btn" id="calculateBtn">Calculate</button>
-
-            <div class="result-box">
-                <div class="step-result">
-                    <span>Consumption (A):</span>
-                    <span id="resA">0.00 kWh</span>
-                </div>
-                <div class="step-result">
-                    <span>Total Cost (B):</span>
-                    <span id="resB">₱0.00</span>
-                </div>
-                <div class="step-result">
-                    <span>Adjusted Factor (C):</span>
-                    <span id="resC">₱0.00</span>
-                </div>
-                
-                <div class="divider"></div>
-
-                <div class="final-d-container">
-                    <div class="final-d-label">Final Output (D)</div>
-                    <div class="final-d-value" id="resD">₱0.00</div>
-                </div>
+            <div class="input-group">
+                <label for="currMonthName">Current Month Name</label>
+                <input type="text" id="currMonthName" placeholder="e.g. November" value="November">
             </div>
         </div>
 
-        <div class="history-panel">
-            <div class="history-header">
-                <span>Calculation History</span>
-                <button class="clear-history" id="clearHistory">Clear</button>
+        <div class="input-row">
+            <div class="input-group">
+                <label for="prevReading">Prev Meter Reading (kWh)</label>
+                <input type="number" id="prevReading" placeholder="0.00" step="any">
             </div>
-            <div class="history-list" id="historyList">
-                <div style="color: var(--text-secondary); font-size: 0.85rem; text-align: center; margin-top: 20px;">No calculations yet</div>
+            <div class="input-group">
+                <label for="currReading">Curr Meter Reading (kWh)</label>
+                <input type="number" id="currReading" placeholder="0.00" step="any">
             </div>
+        </div>
+
+        <div class="input-group">
+            <label for="ratePerKwh">Current Rate per kWh (₱)</label>
+            <input type="number" id="ratePerKwh" placeholder="0.00" step="any">
+        </div>
+
+        <button class="calc-btn" id="calculateBtn">Calculate</button>
+
+        <div class="result-box">
+            <div class="step-result">
+                <span>Consumption:</span>
+                <span id="resConsumption">0.00 kWh</span>
+            </div>
+            <div class="step-result">
+                <span>Total Cost:</span>
+                <span id="resTotalCost">₱0.00</span>
+            </div>
+            
+            <div class="divider"></div>
+
+            <div class="step-result total-row">
+                <span>40%:</span>
+                <span id="resFortyPercent">₱0.00</span>
+            </div>
+        </div>
+
+        <!-- Separate Final Computation Section -->
+        <div class="final-section">
+            <div class="final-label">Final Output</div>
+            <div class="final-value" id="resFinal">₱0.00</div>
         </div>
     </div>
 
@@ -317,14 +234,10 @@
         const ratePerKwhInput = document.getElementById('ratePerKwh');
         const calculateBtn = document.getElementById('calculateBtn');
 
-        const resA = document.getElementById('resA');
-        const resB = document.getElementById('resB');
-        const resC = document.getElementById('resC');
-        const resD = document.getElementById('resD');
-        const historyList = document.getElementById('historyList');
-        const clearHistoryBtn = document.getElementById('clearHistory');
-
-        let history = [];
+        const resConsumption = document.getElementById('resConsumption');
+        const resTotalCost = document.getElementById('resTotalCost');
+        const resFortyPercent = document.getElementById('resFortyPercent');
+        const resFinal = document.getElementById('resFinal');
 
         function formatCurrency(amount) {
             return '₱' + Number(amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -335,66 +248,24 @@
         }
 
         function calculate() {
-            const prevName = prevMonthInput.value || 'Previous Month';
-            const currName = currMonthInput.value || 'Current Month';
             const prev = parseFloat(prevReadingInput.value) || 0;
             const curr = parseFloat(currReadingInput.value) || 0;
             const rate = parseFloat(ratePerKwhInput.value) || 0;
 
-            // Formula:
-            // Current Month minus Previous Month = A
-            const A = curr - prev;
-            
-            // A multiplied by current rate per KwH = B
-            const B = A * rate;
-            
-            // B multiplied by .4 = C
-            const C = B * 0.4;
-            
-            // C minus B = D
-            const D = C - B;
+            // Formulas (using Math.abs to keep positive values and strip minus signs)
+            const consumption = Math.abs(curr - prev);
+            const totalCost = consumption * rate;
+            const fortyPercent = totalCost * 0.4;
+            const finalOutput = Math.abs(fortyPercent - totalCost);
 
             // Update UI elements
-            resA.innerText = `${formatNumber(A)} kWh`;
-            resB.innerText = formatCurrency(B);
-            resC.innerText = formatCurrency(C);
-            resD.innerText = formatCurrency(D);
-
-            // Add to history
-            const historyItem = {
-                title: `${prevName} to ${currName}`,
-                A: `${formatNumber(A)} kWh`,
-                B: formatCurrency(B),
-                C: formatCurrency(C),
-                D: formatCurrency(D)
-            };
-
-            history.unshift(historyItem);
-            if (history.length > 15) history.pop();
-            renderHistory();
-        }
-
-        function renderHistory() {
-            if (history.length === 0) {
-                historyList.innerHTML = `<div style="color: var(--text-secondary); font-size: 0.85rem; text-align: center; margin-top: 20px;">No calculations yet</div>`;
-                return;
-            }
-            historyList.innerHTML = history.map(item => `
-                <div class="history-item">
-                    <div class="history-title">${item.title}</div>
-                    <div>A: ${item.A} | B: ${item.B}</div>
-                    <div>C: ${item.C}</div>
-                    <div class="history-d">D: ${item.D}</div>
-                </div>
-            `).join('');
+            resConsumption.innerText = `${formatNumber(consumption)} kWh`;
+            resTotalCost.innerText = formatCurrency(totalCost);
+            resFortyPercent.innerText = formatCurrency(fortyPercent);
+            resFinal.innerText = formatCurrency(finalOutput);
         }
 
         calculateBtn.addEventListener('click', calculate);
-
-        clearHistoryBtn.addEventListener('click', () => {
-            history = [];
-            renderHistory();
-        });
 
         // Trigger calculation on Enter key inside inputs
         document.querySelectorAll('input').forEach(input => {
